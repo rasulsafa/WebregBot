@@ -4,11 +4,12 @@ const vo = require('vo');
 const courseCode = "34210";
 const username = "...";
 const password = "..."
+const headless = false
 
 vo(run)();
 
 function *run() {
-  var nightmare = Nightmare({show: true});
+  var nightmare = Nightmare({show: !headless});
   yield nightmare
     .goto('https://www.reg.uci.edu/cgi-bin/webreg-redirect.sh')
     .wait("#ucinetid")
@@ -34,7 +35,7 @@ function *run() {
       {
           console.log("Authorization has failed or expired.... Attempting to login again.")
           nightmare.halt();
-          nightmare = Nightmare({show: true}); // workaround to https://github.com/segmentio/nightmare/issues/1349 :(
+          nightmare = Nightmare({show: !headless}); // workaround to https://github.com/segmentio/nightmare/issues/1349 :(
           yield nightmare
             .goto('https://www.reg.uci.edu/cgi-bin/webreg-redirect.sh')
             .wait("#ucinetid")
