@@ -2,9 +2,11 @@ const Nightmare = require('nightmare')
 const vo = require('vo');
 
 const courseCode = "34210";
+const coreqs = ["34211", "34212", "34213", "34214"];
+
 const username = "...";
-const password = "..."
-const headless = false
+const password = "...";
+const headless = false;
 
 vo(run)();
 
@@ -21,7 +23,8 @@ function *run() {
         console.error('Error:', error)
     });
 
-  while(true)
+  var courseAdded = false;
+  while(!courseAdded)
   {
       var authExpired = yield nightmare
       .evaluate(function() {
@@ -63,8 +66,7 @@ function *run() {
       }).catch(error => {
           console.error('Error:', error)
       });
-      if(inMenus)
-      {
+      if(inMenus) {
           yield nightmare
           .wait('input[value=\'Enrollment Menu\']')
           .click('input[value=\'Enrollment Menu\']')
@@ -82,5 +84,28 @@ function *run() {
       .catch(error => {
           console.error('Error:', error)
       });
-  }
+
+      var courseAdded = yield nightmare
+      .evaluate(function() {
+          var content = document.documentElement.innerHTML;
+          return content.includes("You must successfully enroll in all");
+      }).catch(error => {
+          console.error('Error:', error)
+          return false;
+      });
+
+      if(courseAdded) {
+          for(var i = 0; i < coreqs.length; i++) {
+              yield nightmare
+              .wait('#add')
+              .click('#add')
+              .type('input[name=courseCode]', i)
+              .click('input[value=\'Send Request\']')
+              .wait(1000)
+              .catch(error => {
+                  console.error('Error:', error)
+              });
+          }
+      }
+   }
 }
