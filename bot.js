@@ -29,7 +29,9 @@ function *run() {
       var authExpired = yield nightmare
       .evaluate(function() {
           var content = document.documentElement.innerHTML;
-          return content.includes("Authorization has expired") || content.includes("Please logout and try again");
+          return content.includes("Authorization has expired")
+              || content.includes("Please logout and try again")
+              || content.includes("maximum login time exceeded");
       })
       .catch(error => {
           console.error('Error:', error)
