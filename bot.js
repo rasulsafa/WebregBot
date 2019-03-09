@@ -39,7 +39,7 @@ function *run() {
           console.log("Authorization has failed or expired.... Attempting to login again.")
           nightmare.halt();
           nightmare = Nightmare({show: !headless}); // workaround to https://github.com/segmentio/nightmare/issues/1349 :(
-          yield nightmare
+          authExpired = yield nightmare
             .goto('https://www.reg.uci.edu/cgi-bin/webreg-redirect.sh')
             .wait("#ucinetid")
             .type('#ucinetid', username)
@@ -99,13 +99,16 @@ function *run() {
               yield nightmare
               .wait('#add')
               .click('#add')
-              .type('input[name=courseCode]', i)
+              .wait(1000)
+              .type('input[name=courseCode]', coreqs[i])
+              .wait(1000)
               .click('input[value=\'Send Request\']')
               .wait(1000)
               .catch(error => {
                   console.error('Error:', error)
               });
           }
+          console.log("Course successfully added!");
       }
    }
 }
