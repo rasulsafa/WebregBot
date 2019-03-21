@@ -1,0 +1,27 @@
+{
+  "name": "webregbot",
+  "version": "1.0.0",
+  "description": "get me into 161 pls thx",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rasulsafa/WebregBot.git"
+  },
+  "keywords": [
+    "ur",
+    "mom"
+  ],
+  "author": "illorum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rasulsafa/WebregBot/issues"
+  },
+  "homepage": "https://github.com/rasulsafa/WebregBot#readme",
+  "dependencies": {
+    "nightmare": "^3.0.1",
+    "vo": "^4.0.2"
+  }
+}

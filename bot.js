@@ -100,6 +100,7 @@ function* run() {
             });
 
         if (courseAdded) {
+            console.log("Lecture successfully added!");
             for (var i = 0; i < coreqs.length; i++) {
                 yield nightmare
                     .wait('#add')
@@ -113,7 +114,6 @@ function* run() {
                         console.error('Error:', error)
                     });
             }
-            console.log("Course successfully added!");
         }
     }
 }
