@@ -59,7 +59,7 @@ function* run() {
                     return true;
                 });
             if (!authExpired && authExpired !== undefined)
-                console.log("Success!")
+                console.log("Success! Logged back in at " + new Date());
             else
                 console.log("Failed! Trying again...");
         }
@@ -100,20 +100,30 @@ function* run() {
             });
 
         if (courseAdded) {
-            console.log("Lecture successfully added!");
-            for (var i = 0; i < coreqs.length; i++) {
-                yield nightmare
-                    .wait('#add')
-                    .click('#add')
-                    .wait(1000)
-                    .type('input[name=courseCode]', coreqs[i])
-                    .wait(1000)
-                    .click('input[value=\'Send Request\']')
-                    .wait(1000)
-                    .catch(error => {
-                        console.error('Error:', error)
-                    });
+            console.log("Lecture successfully added!\nAttempting to add discussions...");
+            var discussionAdded = false;
+            while(!discussionAdded)
+            {
+                for (var i = 0; i < coreqs.length && !discussionAdded; i++) {
+                    discussionAdded = yield nightmare
+                        .wait('#add')
+                        .click('#add')
+                        .wait(1000)
+                        .type('input[name=courseCode]', coreqs[i])
+                        .wait(1000)
+                        .click('input[value=\'Send Request\']')
+                        .wait(1000)
+                        .evaluate(function () {
+                            var content = document.documentElement.innerHTML;
+                            console.log(content.includes("you have added"))
+                            return content.includes("you have added");
+                        })
+                        .catch(error => {
+                            console.error('Error:', error)
+                        });
+                }
             }
+            console.log("Discussion successfully added! You are now enrolled!");
         }
     }
 }
