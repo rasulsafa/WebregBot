@@ -102,8 +102,7 @@ function* run() {
         if (courseAdded) {
             console.log("Lecture successfully added!\nAttempting to add discussions...");
             var discussionAdded = false;
-            while(!discussionAdded)
-            {
+            while(!discussionAdded) {
                 for (var i = 0; i < coreqs.length && !discussionAdded; i++) {
                     discussionAdded = yield nightmare
                         .wait('#add')
@@ -115,7 +114,6 @@ function* run() {
                         .wait(1000)
                         .evaluate(function () {
                             var content = document.documentElement.innerHTML;
-                            console.log(content.includes("you have added"))
                             return content.includes("you have added");
                         })
                         .catch(error => {
